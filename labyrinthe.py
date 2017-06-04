@@ -121,11 +121,12 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_ligne_actuelle - 1
                 collision = False
-                while i < robot_ligne_nouvelle:
-                    i += 1
-                    if  self.grille[i][robot_colonne_actuelle] == "O":
+                while i > robot_ligne_nouvelle:
+                    if self.grille[i][robot_colonne_actuelle] == "O":
                         collision = True
                         break
+                    i -= 1
+
                 if collision :
                     fin = True
                     message = "Désolé ! Collision avec un mur : Vous avez perdu !"
@@ -142,9 +143,13 @@ class Labyrinthe:
             # Si le pas est 1
 
             else:
+                # S'il y a collision
+                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "O":
+                    fin = True
+                    message = "Désolé ! Collision avec un mur : Vous avez perdu !"
 
                 # Si passe par la sortie
-                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
+                elif self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
                     fin = True
                     message = "Félicitations ! Vous avez gagné !"
                 else:
@@ -174,10 +179,11 @@ class Labyrinthe:
                 collision = False
                 while i < robot_ligne_nouvelle:
                     obstacle = self.grille[i][robot_colonne_actuelle]
-                    i += 1
                     if  obstacle == "O":
                         collision = True
                         break
+                    i += 1
+
                 if collision :
                     fin = True
                     message = "Désolé ! Collision avec un mur : Vous avez perdu !"
@@ -197,9 +203,13 @@ class Labyrinthe:
             # Si le pas est 1
 
             else:
+                # S'il y a collision
+                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "O":
+                    fin = True
+                    message = "Désolé ! Collision avec un mur : Vous avez perdu !"
 
                 # Si passe par la sortie
-                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
+                elif self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
                     fin = True
                     message = "Félicitations ! Vous avez gagné !"
                 else:
@@ -229,10 +239,11 @@ class Labyrinthe:
                 i = robot_colonne_actuelle + 1
                 collision = False
                 while i < robot_colonne_nouvelle:
-                    i += 1
                     if  self.grille[robot_ligne_actuelle][i] == "O":
                         collision = True
                         break
+                    i += 1
+
                 if collision :
                     fin = True
                     message = "Désolé ! Collision avec un mur : Vous avez perdu !"
@@ -250,8 +261,13 @@ class Labyrinthe:
 
             else:
 
+                # S'il y a collision
+                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "O":
+                    fin = True
+                    message = "Désolé ! Collision avec un mur : Vous avez perdu !"
+
                 # Si passe par la sortie
-                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
+                elif self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
                     fin = True
                     message = "Félicitations ! Vous avez gagné !"
                 else:
@@ -276,11 +292,12 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_colonne_actuelle - 1
                 collision = False
-                while i < robot_colonne_nouvelle:
-                    i += 1
+                while i > robot_colonne_nouvelle:
                     if  self.grille[robot_ligne_actuelle][i] == "O":
                         collision = True
                         break
+                    i -= 1
+
                 if collision :
                     fin = True
                     message = "Désolé ! Collision avec un mur : Vous avez perdu !"
@@ -298,8 +315,13 @@ class Labyrinthe:
 
             else:
 
+                # S'il y a collision
+                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "O":
+                    fin = True
+                    message = "Désolé ! Collision avec un mur : Vous avez perdu !"
+
                 # Si passe par la sortie
-                if self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
+                elif self.grille[robot_ligne_nouvelle][robot_colonne_nouvelle] == "U":
                     fin = True
                     message = "Félicitations ! Vous avez gagné !"
                 else:
