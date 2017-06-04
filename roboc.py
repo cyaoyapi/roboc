@@ -89,6 +89,7 @@ while not fin:
 			message = "Choix de déplacement non valide. reprenez !"
 			print(message)
 			print(controles)
+			carte_choisie.labyrinthe.afficher()
 	# Si le choix est de quitter l'application
 	if choix == "Q":
 		carte_choisie.sauvegarder() # On sauvegarde le jeu en cours
