@@ -7,6 +7,7 @@ Exécutez-le avec Python pour lancer le jeu.
 """
 
 import os
+import sys
 
 from carte import Carte
 
@@ -37,10 +38,16 @@ numero_labyrinthe = int(input("Entrez un numéro de labyrinthe pour commencer à
 carte_choisie = cartes[numero_labyrinthe - 1]
 
 # Sauvegarder la carte avant de commencer à jouer
+fin = False
+message = ""
 
-carte_choisie.labyrinthe.afficher()
+while not fin:
+	carte_choisie.labyrinthe.afficher()
+	choix = input("Deplacez votre robot\n")
+	fin, message = carte_choisie.labyrinthe.deplacer_robot(choix)
 
-carte_choisie.labyrinthe.detecter_position_robot()
+	if not fin:
+		print(message)
 
-choix = input("Deplacez votre robot\n")
-print(carte_choisie.labyrinthe.deplacer_robot(choix))
+print(message)
+sys.exit(0)
