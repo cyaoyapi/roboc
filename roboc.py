@@ -39,4 +39,8 @@ carte_choisie = cartes[numero_labyrinthe - 1]
 # Sauvegarder la carte avant de commencer à jouer
 
 carte_choisie.labyrinthe.afficher()
-print(carte_choisie.labyrinthe.detecter_position_robot())
+
+carte_choisie.labyrinthe.detecter_position_robot()
+
+choix = input("Deplacez votre robot\n")
+print(carte_choisie.labyrinthe.deplacer_robot(choix))
