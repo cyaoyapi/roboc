@@ -163,7 +163,7 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_ligne_actuelle - 1
                 collision = False
-                while i > robot_ligne_nouvelle:
+                while i >= robot_ligne_nouvelle:
                     if self.grille[i][robot_colonne_actuelle] == "O":
                         collision = True
                         break
@@ -182,7 +182,7 @@ class Labyrinthe:
                     self.gerer_lignes_deplacement_y(robot_ligne_actuelle,robot_colonne_actuelle,robot_ligne_nouvelle,robot_colonne_nouvelle)
                     fin = False
                     message = message = Labyrinthe.MSG["B"]
-                    
+
             # Si le pas est 1
 
             else:
@@ -210,7 +210,7 @@ class Labyrinthe:
             robot_colonne_nouvelle = robot_colonne_actuelle
 
             # Si le déplacement amène le robot hors de la zone du labyrinthe
-            if robot_ligne_nouvelle > len(self.grille) :
+            if robot_ligne_nouvelle >= len(self.grille) :
                 fin = True
                 message = message = Labyrinthe.MSG["H"]
 
@@ -220,7 +220,7 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_ligne_actuelle + 1
                 collision = False
-                while i < robot_ligne_nouvelle:
+                while i <= robot_ligne_nouvelle:
                     obstacle = self.grille[i][robot_colonne_actuelle]
                     if  obstacle == "O":
                         collision = True
@@ -272,7 +272,7 @@ class Labyrinthe:
             robot_colonne_nouvelle = robot_colonne_actuelle + pas
 
             # Si le déplacement amène le robot hors de la zone du labyrinthe
-            if robot_colonne_nouvelle > len(self.grille[0]) :
+            if robot_colonne_nouvelle >= len(self.grille[0]) :
                 fin = True
                 message = message = Labyrinthe.MSG["H"]
 
@@ -281,7 +281,7 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_colonne_actuelle + 1
                 collision = False
-                while i < robot_colonne_nouvelle:
+                while i <= robot_colonne_nouvelle:
                     if  self.grille[robot_ligne_actuelle][i] == "O":
                         collision = True
                         break
@@ -300,6 +300,7 @@ class Labyrinthe:
                     self.gerer_ligne_deplacement_x(robot_ligne_actuelle,robot_colonne_actuelle,robot_ligne_nouvelle,robot_colonne_nouvelle)
                     fin = False
                     message = message = Labyrinthe.MSG["B"]
+            
             # Si le pas est 1
 
             else:
@@ -335,7 +336,7 @@ class Labyrinthe:
             elif pas > 1:
                 i = robot_colonne_actuelle - 1
                 collision = False
-                while i > robot_colonne_nouvelle:
+                while i >= robot_colonne_nouvelle:
                     if  self.grille[robot_ligne_actuelle][i] == "O":
                         collision = True
                         break

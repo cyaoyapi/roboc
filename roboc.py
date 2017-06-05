@@ -66,6 +66,11 @@ Insctructions pour delpacer votre robot X :
     Chacune des directions ci-dessus suivies d'un nombre permet 
     d'avancer de plusieurs cases (par exemple E3 pour avancer 
     de trois cases vers l'Est).
+
+    Symboles :
+    O : Un mur
+    . : Une porte
+    U : Une sortie
 ===================================================================
 """
 
@@ -78,12 +83,12 @@ message = ""
 while not fin:
 	carte_choisie.sauvegarder() # A chaque tour on sauvegarde la carte telle qu'elle se présente actuellement
 	carte_choisie.labyrinthe.afficher() # On l'affiche le labyrinthe
-	regex = r"^[QNESO]([1-9][0-9]*)*$" # Motif de choix valide de déplacement du robot
+	regex = r"^[NESO]([1-9][0-9]*)*$" # Motif de choix valide de déplacement du robot
 	choix_valide = False
 	# Tant que le choix n'est pas valide
 	while not choix_valide:
 		choix = input("Deplacez votre robot (X) \n")
-		if re.match(regex, choix) is not None:
+		if re.match(regex, choix) is not None or choix == "Q":
 			choix_valide = True
 		else :
 			message = "Choix de déplacement non valide. reprenez !"
