@@ -42,7 +42,7 @@ if os.path.exists("encours") :
 numero_valide = False
 while not numero_valide:
 	try:
-		numero_labyrinthe = int(input("Entrez un numéro de labyrinthe pour commencer à jour\n"))
+		numero_labyrinthe = int(input("Entrez un numéro de labyrinthe pour commencer à jouer\n"))
 		assert  numero_labyrinthe > 0 and numero_labyrinthe <= len(cartes)
 	except ValueError:
 		print("Vous devez saisir un nombre entier valide")
