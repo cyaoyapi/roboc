@@ -122,7 +122,7 @@ class Labyrinthe:
 
         """Methode permettant de controler le deplacement du robot
             
-            Elle retourne 2 paramètre :
+            Elle retourne 2 paramètres :
 
             - fin (Boolean) : Qui inqique si on continue le jeu(False) ou si on arrête(True)
             - message : Un message explicite à l'endroit de l'utilisateur

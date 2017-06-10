@@ -21,7 +21,7 @@ for nom_fichier in os.listdir("cartes"):
         nom_carte = nom_fichier[:-3].lower()
         with open(chemin, "r") as fichier:
             contenu = fichier.read()
-            # Création d'une carte et ajout à liste des cartes
+            # Création d'une carte et ajout à la liste des cartes
             carte_obj = Carte(nom_carte,contenu)
             cartes.append(carte_obj)
 
@@ -79,7 +79,7 @@ print(controles) # On affiche les instructions de déplacement du robot
 fin = False
 message = ""
 
-#On entre dans une boucle, tant que fin n'est pas True
+#On rentre dans une boucle, tant que fin n'est pas True
 while not fin:
 	carte_choisie.sauvegarder() # A chaque tour on sauvegarde la carte telle qu'elle se présente actuellement
 	carte_choisie.labyrinthe.afficher() # On l'affiche le labyrinthe
