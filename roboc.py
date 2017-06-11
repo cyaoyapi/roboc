@@ -87,19 +87,18 @@ while not fin:
 	choix_valide = False
 	# Tant que le choix n'est pas valide
 	while not choix_valide:
-		choix = input("Deplacez votre robot (X) \n")
+		choix = input("\nDeplacez votre robot (X) \n")
 		if re.match(regex, choix) is not None or choix == "Q":
 			choix_valide = True
 		else :
-			message = "Choix de déplacement non valide. reprenez !"
+			message = "Choix de déplacement non valide. reprenez !\n"
 			print(message)
-			print(controles)
 			carte_choisie.labyrinthe.afficher()
 	# Si le choix est de quitter l'application
 	if choix == "Q":
 		carte_choisie.sauvegarder() # On sauvegarde le jeu en cours
 		fin = True
-		message = "Vous quittez le jeu. Aurevoir et à bientôt"
+		message = "Vous quittez le jeu. Aurevoir et à bientôt !\n"
 
 	# Si le choix de déplacement est valide
 	else:
