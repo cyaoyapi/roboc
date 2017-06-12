@@ -2,8 +2,6 @@
 
 """Ce module contient la classe Carte."""
 
-from labyrinthe import Labyrinthe # importation la classe Labyrinthe
-
 
 class Carte:
 
