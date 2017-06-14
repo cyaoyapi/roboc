@@ -23,7 +23,6 @@ class Joueur:
         self.socket = socket
         Joueur.nombre += 1
         self.num = Joueur.nombre
-        self.tour = True # Tour de parole
 
     def __repr__(self):
         return "<Joueur num ={} x={} y={}> connecté depuis {}:{}".format(self.num, self.x, self.y, self.ip, self.port)

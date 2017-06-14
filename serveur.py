@@ -19,24 +19,47 @@ from joueur import Joueur
 
 ###################### Definition de tread pour la gestion simultanée des joueurs #################
 
-class ThreadClient(threading.Thread):
 
-	""" Objet thread gérant la réception des messages """
+class JoueurAvant(threading.Thread):
 
-	def __init__(self, connexion):
+	"""Thread des joueurs selectionnés avant le début du la partie"""
+
+	def __init__(self, joueur):
 
 		threading.Thread.__init__(self)
-		self.connexion = connexion
+		self.joueur = joueur
+		self.stop = False
+
 
 	def run(self):
-		
+
 		global commencer
-		while 1:
-			msg_recu = self.connexion.recv(1024)
-			msg_recu = msg_recu.decode()
-			if msg_recu == "C":
-				commencer = True
-			print(commencer)
+
+		while not self.stop:
+
+			while True:
+
+				msg_recu = self.joueur.socket.recv(1024)
+				msg_recu = msg_recu.decode()
+				if msg_recu.upper() == "C":
+					commencer = True
+					break
+				else:
+					msg_a_envoyer = "Saisie non valide !\n"
+					self.joueur.socket.send(msg_a_envoyer.encode())
+					msg_a_envoyer = "\nEntrez C pour commencer a jouer :\n"
+					self.joueur.socket.send(msg_a_envoyer.encode())
+
+
+			if self.stop:
+				break
+
+
+
+	def stopper(self):
+
+		self.stop = True
+
 
 	
 			
@@ -68,7 +91,11 @@ port = 12000 # port d'écoute du serveur
 connexion_principale = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Lié le serveur au port d'écoute
-connexion_principale.bind((hote,port))
+try:
+	connexion_principale.bind((hote,port))
+except socket.error:
+	print("La liason avec le port a echoué")
+	sys.exit()
 
 # Faire écouter le serveur
 connexion_principale.listen(5)
@@ -78,8 +105,10 @@ print("On attend les joueurs")
 
 ####################### On écouter les connexions demandées jusqu'à ce que la partie commence(quelqu'un saisi C) ########################
 
-
+verrou = threading.RLock()
 commencer = False
+joueurs_avant = []
+
 while not commencer:
 
 	connexions_demandees, wlist, xlist = select.select([connexion_principale],[],[],0.03)
@@ -100,9 +129,12 @@ while not commencer:
 			carte_choisie.labyrinthe.grille[x][y] = joueur_new
 			carte_choisie.labyrinthe.joueurs.append(joueur_new)
 			
-			thread_joueur = ThreadClient(connexion_client)
-			thread_joueur.start()
-			
+			joueur_avant = JoueurAvant(joueur_new)
+			joueur_avant.setDaemon(True)
+			joueurs_avant.append(joueur_avant)
+			joueur_avant.start()
+
+			print("{} connecté(s)".format(Joueur.nombre))
 
 
 			for joueur in carte_choisie.labyrinthe.joueurs:
@@ -112,10 +144,9 @@ while not commencer:
 				joueur.socket.send(msg_a_envoyer.encode())
 
 				if Joueur.nombre > 1:
-					msg_a_envoyer = "Jouer"
-					joueur.socket.send(msg_a_envoyer.encode())
 					msg_a_envoyer = "\nEntrez C pour commencer a jouer :\n"
 					joueur.socket.send(msg_a_envoyer.encode())
+
 
 
 
@@ -123,30 +154,24 @@ while not commencer:
 ####################### Le jeu commence et se dérole tant que fin = False ########################################
 
 
+for joueur in carte_choisie.labyrinthe.joueurs:
+	msg_a_envoyer = "La partie commence !\n"
+	joueur.socket.send(msg_a_envoyer.encode())
+	msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(joueur)
+	joueur.socket.send(msg_a_envoyer.encode())
 
-if commencer:
-	for joueur in carte_choisie.labyrinthe.joueurs:
-		joueur.socket.send("La partie commence !\n".encode())
-		msg_labyrinthe = carte_choisie.labyrinthe.generer_contenu(joueur)
-		joueur.socket.send(msg_labyrinthe.encode())
+# arrêt de tous les threads
+for joueur_avant in joueurs_avant:
+    joueur_avant.stopper()
+ 
+# attente jusqu'à ce que tous les threads soient terminés
+for joueur_avant in joueurs_avant:
+    joueur_avant.join()
+
+print(commencer)
+print("Le jeu peux commencer\n")
 
 
-fin = False
-message = ""
-
-avancer = True
-index = 0
-while not fin:
-
-	if avancer :
-		joueur = carte_choisie.labyrinthe.joueurs[index]
-		joueur.socket.send("T".encode())
-		avancer = False
-		index += 1
-		if index == len(carte_choisie.labyrinthe.joueurs):
-			index = 0
-	else :
-		continue
 
 
 

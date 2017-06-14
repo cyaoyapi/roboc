@@ -16,9 +16,6 @@ import threading # Module pour la programmation parallèle
 import utils 
 
 
-
-tour = False
-
 ###################### Definition de 2 Threads : l'un pour l'envoi et l'autre la reception####
 
 class ThreadReception(threading.Thread):
@@ -32,16 +29,17 @@ class ThreadReception(threading.Thread):
 
 	def run(self):
 
-		global tour
-		while 1:
+		global thread_emission
+		while True:
 			msg_recu = self.connexion.recv(1024)
 			msg_recu = msg_recu.decode()
+			print(msg_recu)
 
-			if msg_recu == "Jouer":
-				tour = True
+		self.join()
+		thread_emission.join()
+		connexion.close()
 
-			else:
-				print(msg_recu)
+
 
 class ThreadEmission(threading.Thread):
 
@@ -52,16 +50,12 @@ class ThreadEmission(threading.Thread):
 		self.connexion = connexion
 
 	def run(self):
-		while 1:
+		while True:
 			msg_emis = input()
-			"""
-			if tour:
-				self.connexion.send(msg_emis.encode())
-			else:
-				print("Ce n'est pas votre tour. Vous ne pouvez pas envoyer de commandes !")
-
-			"""
 			self.connexion.send(msg_emis.encode())
+
+		
+
 
 ####################### Programme principal du client : Connexion avec le serveur######################
 
@@ -86,6 +80,8 @@ thread_reception = ThreadReception(connexion_server)
 
 thread_reception.start()
 thread_emission.start()
+
+
 
 
 
