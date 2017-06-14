@@ -16,12 +16,9 @@ import threading # Module pour la programmation parallèle
 import utils 
 
 
+###################### Definition de 2 Threads : l'un pour l'envoi et l'autre la reception#########
 
-tour = False
-
-###################### Definition de 2 Threads : l'un pour l'envoi et l'autre la reception####
-
-class ThreadReception(threading.Thread):
+class ThreadRecevoir(threading.Thread):
 
 	"""Objet thread gérant la réception des messages"""
 
@@ -32,47 +29,44 @@ class ThreadReception(threading.Thread):
 
 	def run(self):
 
-		global tour
-		while 1:
-			msg_recu = self.connexion.recv(1024)
+		while True:
+			msg_recu = self.connexion.recv(2014)
 			msg_recu = msg_recu.decode()
+			print(msg_recu)
+				
 
-			if msg_recu == "Jouer":
-				tour = True
+		self.connexion.close()
+		sys.exit()
 
-			else:
-				print(msg_recu)
 
-class ThreadEmission(threading.Thread):
+class ThreadEnvoyer(threading.Thread):
 
-	"""objet thread gérant l'émission des messages"""
+	"""Objet thread gérant l'envoi des messages"""
+
 	def __init__(self, connexion):
 
 		threading.Thread.__init__(self)
 		self.connexion = connexion
 
 	def run(self):
-		while 1:
-			msg_emis = input()
-			"""
-			if tour:
-				self.connexion.send(msg_emis.encode())
-			else:
-				print("Ce n'est pas votre tour. Vous ne pouvez pas envoyer de commandes !")
 
-			"""
-			self.connexion.send(msg_emis.encode())
+		global tour
+
+		while True:
+			msg_a_envoyer = input("")
+			self.connexion.send(msg_a_envoyer.encode())
+			
 
 ####################### Programme principal du client : Connexion avec le serveur######################
 
-hote = '' # on s'attend à une connection de n'importe quel hote 
-port = 12000 # port d'écoute du serveur
+HOTE = 'localhost' # hostname du serveur 
+PORT = 12000 # port d'écoute du serveur
 
 connexion_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
 	print("On tente de se connecter au serveur...\n")
-	connexion_server.connect((hote, port))
+	connexion_server.connect((HOTE, PORT))
 except socket.error:
 	print ("La connexion a échoué.")
 	sys.exit()    
@@ -81,12 +75,12 @@ else :
 
 # Dialogue avec le serveur : on lance deux threads pour gérer
 # indépendamment l'émission et la réception des messages :
-thread_emission = ThreadEmission(connexion_server)
-thread_reception = ThreadReception(connexion_server)  
+thread_reception = ThreadRecevoir(connexion_server)  
+thread_emission = ThreadEnvoyer(connexion_server)
+
 
 thread_reception.start()
 thread_emission.start()
 
-
-
-
+thread_reception.join()
+thread_emission.join()
