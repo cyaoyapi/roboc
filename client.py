@@ -29,15 +29,16 @@ class ThreadReception(threading.Thread):
 
 	def run(self):
 
-		global thread_emission
 		while True:
+
 			msg_recu = self.connexion.recv(1024)
 			msg_recu = msg_recu.decode()
 			print(msg_recu)
 
-		self.join()
-		thread_emission.join()
-		connexion.close()
+		self.connexion.close()
+		sys.exit()
+
+		
 
 
 
@@ -78,8 +79,12 @@ else :
 thread_emission = ThreadEmission(connexion_server)
 thread_reception = ThreadReception(connexion_server)  
 
+
 thread_reception.start()
 thread_emission.start()
+
+thread_reception.join()
+thread_emission.join()
 
 
 
