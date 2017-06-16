@@ -11,10 +11,15 @@
 import sys # Module pour interragir avec le système
 import socket # Module socket pour créer des objets de connexion
 import select # Module gérer des connexions multi-clients au serveur
+import re # Module pour la gestion des expressions regulières
+import time
 
-# On importe le module personnalisé utils qui regroupe des objets utiles pour le programme
-import utils 
+from obstacle.vide import Vide
 from joueur import Joueur
+
+# On importe le module personnalisé utils qui regroupe des objets utilitaires
+import utils 
+
 
 
 
@@ -140,24 +145,141 @@ while not commencer:
 ####################### Le jeu commence et se dérole tant que fin = False ########################################
 
 fin = False
-message = ""
+REGEX1 = r"^[NESO]([1-9][0-9]*)*$" # Motif de choix valide de déplacement du robot
+REGEX2 = r"^[MP][NESO]$" # Motif de choix valide de déplacement du robot
 
-num_tour = 0
-
+num_tour = 1
 while not fin:
 	
-	joueur = carte_choisie.labyrinthe.joueurs[num_tour]
-	msg_a_envoyer = "C'est votre tour! Deplacez votre robot(X)"
+	joueur = carte_choisie.labyrinthe.joueurs[num_tour - 1]
+	msg_a_envoyer = "C'est votre tour! Deplacez votre robot(Grand X)"
 	joueur.socket.send(msg_a_envoyer.encode())
-	msg_recu = joueur.socket.recv(2014)
-	print(msg_recu.decode())
 
-	#Mettre ici le code du deplacement
+	print("tour = {} VS num= {}".format(num_tour,joueur.num))
 
-	if num_tour == Joueur.nombre - 1:
-		num_tour = 0
+	######Mettre ici le code du deplacement#####
+	choix_valide = False
+	# Tant que le choix n'est pas valide
+	while not choix_valide:
+
+		msg_recu = joueur.socket.recv(2014)
+		msg_recu = msg_recu.decode()
+		if re.match(REGEX1,msg_recu.upper()) is not None or re.match(REGEX2,msg_recu.upper()) is not None or msg_recu.upper() == "Q":
+			choix_valide = True
+		else :
+			msg_a_envoyer = "Choix de déplacement non valide. reprenez !\n"
+			joueur.socket.send(msg_a_envoyer.encode())
+	# Si le choix est de quitter l'application
+	if msg_recu.upper() == "Q":
+
+		if num_tour == len(carte_choisie.labyrinthe.joueurs):
+			num_tour = 1
+		#else:
+			#num_tour = num_tour 
+		
+		vide = Vide(joueur.x,joueur.y)
+		carte_choisie.labyrinthe.grille[joueur.x][joueur.y] = vide
+		carte_choisie.labyrinthe.joueurs.remove(joueur)
+		# On retrie les éléments restants
+		carte_choisie.labyrinthe.joueurs = sorted(carte_choisie.labyrinthe.joueurs, key= lambda chaque_joueur: chaque_joueur.num)
+		msg_a_envoyer = """
+		Vous quittez la partie. 
+		Vous serez déconnectés dans moins de 3 secondes.
+		Faites CTRL + C pour vous deconnecté vous-même.
+		Aurevoir et à bientôt !
+		"""
+		joueur.socket.send(msg_a_envoyer.encode())
+
+		tps=time.time()
+
+		while time.time() - tps < 3:
+			pass
+
+		print(carte_choisie.labyrinthe.joueurs)
+		tps=time.time()
+
+		while time.time() - tps < 5:
+			pass
+		for chaque_joueur in carte_choisie.labyrinthe.joueurs:
+			msg_a_envoyer = "Le joueur {} vient de quitter la partie. Toutefois, elle se poursuit\n".format(joueur.num)
+			chaque_joueur.socket.send(msg_a_envoyer.encode())
+			msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
+			chaque_joueur.socket.send(msg_a_envoyer.encode())
+
+		tps=time.time()
+
+		while time.time() - tps < 5:
+			pass
+
+
+	# Si le choix de déplacement est valide
 	else:
-		num_tour += 1
+		fin, msg_a_envoyer = carte_choisie.labyrinthe.deplacer_robot(num_tour -1, msg_recu.upper())
+		if not fin:
+			joueur.socket.send(msg_a_envoyer.encode())
+			msg_a_envoyer = "Patientez à nouveau que ce soit votre tour de jouer.\n"
+			joueur.socket.send(msg_a_envoyer.encode())
+			for chaque_joueur in carte_choisie.labyrinthe.joueurs:
+				msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
+				chaque_joueur.socket.send(msg_a_envoyer.encode())
+		else:
+			joueur.socket.send(msg_a_envoyer.encode())
+			msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
+			joueur.socket.send(msg_a_envoyer.encode())
+			break
+
+
+		if num_tour == len(carte_choisie.labyrinthe.joueurs):
+			num_tour = 1
+		else:
+			num_tour += 1
+
+
+
+		
+			
+
+	
+
+
+#########"C'est la fin #####################
+
+
+joueur_gangant = carte_choisie.labyrinthe.joueurs[num_tour - 1]
+
+for chaque_joueur in carte_choisie.labyrinthe.joueurs:
+
+	if chaque_joueur.ip != joueur_gangant.ip or chaque_joueur.port != joueur_gangant.port:
+		msg_a_envoyer = "Le joueur {} a gagné la partie. Vous avez perdu !\n".format(joueur_gangant.num)
+		chaque_joueur.socket.send(msg_a_envoyer.encode())
+		msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
+		chaque_joueur.socket.send(msg_a_envoyer.encode())
+	
+
+	msg_a_envoyer = """
+	C'est la fin de la partie. Merci et à bientôt.
+	Votre client sera déconnecté dans moins de 15 sécondes.
+	Faites CTRL + C pour arrêter vous-même votre client.
+	"""
+	chaque_joueur.socket.send(msg_a_envoyer.encode())
+
+print("Le joueur {} a gagné la partie \n".format(joueur_gangant.num))
+print("C'est la fin de la partie. Merci et à bientôt\n")
+
+
+tps=time.time()
+
+while time.time() - tps < 15 :
+	pass
+
+for chaque_joueur in carte_choisie.labyrinthe.joueurs:
+	chaque_joueur.socket.close()
+
+
+
+connexion_principale.close()
+sys.exit()
+	
 
 
 

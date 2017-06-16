@@ -83,3 +83,41 @@ def saisir_numero_labyrinthe(liste_cartes):
 
 	return numero_labyrinthe
 
+
+
+#################################################################
+
+def determiner_nouvelle_position(sens,pas,x,y):
+
+    """ Cette fonction permet de déterminer les coordonnée de la nouvelle position envisagéé par le joeur.
+            
+        - sens : le sens du déplacement
+        - pas : le pas 
+
+        Elle est utilisée dans la méthode 'deplacer_robot'
+
+    """
+
+    x_new = x
+    y_new = y
+
+    if sens in ["N","S"]:
+    # On détermine les coordonnées de la position ou le joueur souhaite se deplacer
+        if sens == "N" :
+            x_new = x - pas
+        else:
+            x_new = x + pas
+
+    else:
+
+        # On détermine les coordonnées de la position ou le joueur souhaite se deplacer
+
+        if sens == "O" :
+            y_new = y - pas
+        else:
+            y_new = y + pas
+
+
+    return x_new, y_new
+
+
