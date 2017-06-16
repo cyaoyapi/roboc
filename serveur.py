@@ -115,7 +115,7 @@ while not commencer:
 		for client in clients_a_lire:
 			msg_recu = client.recv(1024)
 			msg_recu = msg_recu.decode()
-			print(msg_recu)
+			
 
 			if Joueur.nombre < 2:
 				msg_a_envoyer = "Patientez qu'au moins un autre joueur se connecte !"
@@ -123,6 +123,7 @@ while not commencer:
 
 			elif msg_recu.upper() == "C":
 				commencer = True
+				print("La partie commence et est en cours...")
 				break
 
 			else:
@@ -155,9 +156,6 @@ while not fin:
 	msg_a_envoyer = "C'est votre tour! Deplacez votre robot(Grand X)"
 	joueur.socket.send(msg_a_envoyer.encode())
 
-	print("tour = {} VS num= {}".format(num_tour,joueur.num))
-
-	######Mettre ici le code du deplacement#####
 	choix_valide = False
 	# Tant que le choix n'est pas valide
 	while not choix_valide:
@@ -184,7 +182,7 @@ while not fin:
 		carte_choisie.labyrinthe.joueurs = sorted(carte_choisie.labyrinthe.joueurs, key= lambda chaque_joueur: chaque_joueur.num)
 		msg_a_envoyer = """
 		Vous quittez la partie. 
-		Vous serez déconnectés dans moins de 3 secondes.
+		Vous serez déconnectés dans moins de 5 secondes.
 		Faites CTRL + C pour vous deconnecté vous-même.
 		Aurevoir et à bientôt !
 		"""
@@ -192,14 +190,11 @@ while not fin:
 
 		tps=time.time()
 
-		while time.time() - tps < 3:
-			pass
-
-		print(carte_choisie.labyrinthe.joueurs)
-		tps=time.time()
-
 		while time.time() - tps < 5:
 			pass
+
+		joueur.socket.close()
+
 		for chaque_joueur in carte_choisie.labyrinthe.joueurs:
 			msg_a_envoyer = "Le joueur {} vient de quitter la partie. Toutefois, elle se poursuit\n".format(joueur.num)
 			chaque_joueur.socket.send(msg_a_envoyer.encode())
@@ -258,7 +253,7 @@ for chaque_joueur in carte_choisie.labyrinthe.joueurs:
 
 	msg_a_envoyer = """
 	C'est la fin de la partie. Merci et à bientôt.
-	Votre client sera déconnecté dans moins de 15 sécondes.
+	Votre client sera déconnecté dans moins de 10 sécondes.
 	Faites CTRL + C pour arrêter vous-même votre client.
 	"""
 	chaque_joueur.socket.send(msg_a_envoyer.encode())
@@ -269,7 +264,7 @@ print("C'est la fin de la partie. Merci et à bientôt\n")
 
 tps=time.time()
 
-while time.time() - tps < 15 :
+while time.time() - tps < 10 :
 	pass
 
 for chaque_joueur in carte_choisie.labyrinthe.joueurs:

@@ -11,6 +11,7 @@
 import sys # Module pour interragir avec le système
 import socket # Module socket pour créer des objets de connexion
 import threading # Module pour la programmation parallèle
+import time
 
 # On importe le module utils qui regroupe des objets utiles pour le programme
 import utils 
@@ -31,9 +32,19 @@ class ThreadReception(threading.Thread):
 
 		while True:
 
-			msg_recu = self.connexion.recv(1024)
-			msg_recu = msg_recu.decode()
-			print(msg_recu)
+			try:
+				msg_recu = self.connexion.recv(1024)
+			except socket.error:
+				print("Vous êtes déconnecté du serveur")
+				break
+			else:
+				msg_recu = msg_recu.decode()
+				print(msg_recu)
+
+		tps=time.time()
+
+		while time.time() - tps < 3 :
+			pass
 
 		self.connexion.close()
 		sys.exit()
@@ -51,11 +62,24 @@ class ThreadEmission(threading.Thread):
 		self.connexion = connexion
 
 	def run(self):
-		while True:
-			msg_emis = input()
-			self.connexion.send(msg_emis.encode())
 
-		
+		while True:
+			try:
+				msg_a_envoyer = input()
+			except socket.error:
+				print("Vous êtes déconnecté du serveur")
+			else:
+				self.connexion.send(msg_a_envoyer.encode())
+				if msg_a_envoyer.upper() == "Q":
+					break
+
+		tps=time.time()
+
+		while time.time() - tps < 3 :
+			pass
+
+		self.connexion.close()
+		sys.exit()
 
 
 ####################### Programme principal du client : Connexion avec le serveur######################
