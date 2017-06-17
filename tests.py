@@ -364,8 +364,8 @@ class LabyrintheTest(unittest.TestCase):
 		# Cas 1 : déplacement Nord, Sud, Est, Ouest sans précision du pas (mais en fait pas = 1)
 		msg_recu = random.choice(['N','S','O','E'])
 		fin, msg_a_envoyer = carte_obtenue.labyrinthe.deplacer_robot(num_tour,msg_recu)
-		self.assertIsInstance(fin,bool)
-		self.assertIn(msg_a_envoyer,Labyrinthe.MSG)
+		self.assertIn(fin,[True, False])
+		self.assertIn(msg_a_envoyer,Labyrinthe.MSG.values())
 
 		# Cas 2 : déplacement Nord, Sud, Est, Ouest sans précision du pas et p >= 1
 		pas = random.randint(1,30)
@@ -375,14 +375,14 @@ class LabyrintheTest(unittest.TestCase):
 		Ep = "E"+ str(pas)
 		sg_recu = random.choice([Np,Sp,Op,Ep])
 		fin, msg_a_envoyer = carte_obtenue.labyrinthe.deplacer_robot(num_tour,msg_recu)
-		self.assertIsInstance(fin,bool)
-		self.assertIsInstance(msg_a_envoyer,Labyrinthe.MSG)
+		self.assertIn(fin,[True, False])
+		self.assertIn(msg_a_envoyer,Labyrinthe.MSG.values())
 
 		# Cas 3 : Murer(M) une porte ou Trouer(P) un mur
 		pas = random.choice(['MN','MS','MO','ME','PN','PS','PO','PE'])
 		fin, msg_a_envoyer = carte_obtenue.labyrinthe.deplacer_robot(num_tour,msg_recu)
-		self.assertIsInstance(fin,bool)
-		self.assertIsInstance(msg_a_envoyer,Labyrinthe.MSG)
+		self.assertIn(fin,[True, False])
+		self.assertIn(msg_a_envoyer,Labyrinthe.MSG.values())
 
 
 

@@ -36,10 +36,11 @@ Insctructions du Jeu de labyrinthe multi-joueurs:
 
     Les Symboles 
     
-    O : Un mur
-    . : Une porte
-    U : Une sortie
-    X : Robot du Joueur sur son interface (petit (x) pour les autres joueurs)
+    O : un mur
+    U : une sortie
+    . : une porte
+    X : le robot du Joueur sur de puis son interface
+    x : le robot des autres joeurs depuis l'interface d'un joueur
 
 ==============================================================================
 """
@@ -86,7 +87,7 @@ def saisir_numero_labyrinthe(liste_cartes):
 
 	while not numero_valide:
 		try:
-			numero_labyrinthe = int(input("Entrez un numéro de labyrinthe pour commencer à jouer\n"))
+			numero_labyrinthe = int(input("Entrez un numéro de labyrinthe pour commencer à jouer (O < numero <= {})\n".format(len(liste_cartes))))
 			assert  numero_labyrinthe > 0 and numero_labyrinthe <= len(liste_cartes)
 		except ValueError:
 			print("Vous devez saisir un nombre entier valide")
