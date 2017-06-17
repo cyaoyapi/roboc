@@ -37,6 +37,3 @@ class Joueur:
     def __str__(self):
         return "Joueur {} [{},{}] connecté depuis {}:{}".format(self.num,self.x, self.y, self.ip, self.port)
 
-    def __del__(self):
-
-        Joueur.nombre -= 1

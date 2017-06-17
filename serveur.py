@@ -132,7 +132,10 @@ while not commencer:
 
 		if commencer:
 			for joueur in carte_choisie.labyrinthe.joueurs:
-				msg_a_envoyer = "La partie a commencé. Attendez que ce soit votre tour pour jouer !\n"
+				msg_a_envoyer = "La partie commence.\n"
+				joueur.socket.send(msg_a_envoyer.encode())
+				joueur.socket.send(utils.INSTRUCTIONS.encode())
+				msg_a_envoyer = "Attendez que ce soit votre tour pour jouer !\n"
 				joueur.socket.send(msg_a_envoyer.encode())
 
 			break
@@ -182,7 +185,7 @@ while not fin:
 		carte_choisie.labyrinthe.joueurs = sorted(carte_choisie.labyrinthe.joueurs, key= lambda chaque_joueur: chaque_joueur.num)
 		msg_a_envoyer = """
 		Vous quittez la partie. 
-		Vous serez déconnectés dans moins de 5 secondes.
+		Vous serez déconnectés dans moins de 3 secondes.
 		Faites CTRL + C pour vous deconnecté vous-même.
 		Aurevoir et à bientôt !
 		"""
@@ -190,7 +193,7 @@ while not fin:
 
 		tps=time.time()
 
-		while time.time() - tps < 5:
+		while time.time() - tps < 3:
 			pass
 
 		joueur.socket.close()
@@ -203,7 +206,7 @@ while not fin:
 
 		tps=time.time()
 
-		while time.time() - tps < 5:
+		while time.time() - tps < 3:
 			pass
 
 
@@ -264,7 +267,7 @@ print("C'est la fin de la partie. Merci et à bientôt\n")
 
 tps=time.time()
 
-while time.time() - tps < 10 :
+while time.time() - tps < 5 :
 	pass
 
 for chaque_joueur in carte_choisie.labyrinthe.joueurs:

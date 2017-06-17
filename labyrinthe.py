@@ -1,9 +1,11 @@
 # -*-coding:Utf-8 -*
 
+"""Ce module contient la classe Labyrinthe."""
+
+import os
 import random ## Module pour faire du pseudo aléatoire
 import re # Module pour la gestion des expressions regulières
 
-"""Ce module contient la classe Labyrinthe."""
 from obstacle.vide import Vide
 from obstacle.mur import Mur
 from obstacle.porte import Porte
@@ -97,9 +99,42 @@ class Labyrinthe:
 
     #################################################
 
+    def generer_postion_libre(self):
+
+        """Méthode permet de générer une position aléatoire libre pour un nouveau joueur"""
+
+        i = 0
+        liste_vides = [] # Liste des espaces vides (Une liste de tuple(x,y))
+        
+        for liste_ligne in self.grille:
+            
+            j = 0
+            for obstacle in liste_ligne:
+                if obstacle.symbole == " ":
+                    couple = (i,j)
+                    liste_vides.append(couple)
+                j += 1
+            i += 1
+
+        vide_choisi = random.choice(liste_vides)
+
+        return vide_choisi[0], vide_choisi[1] 
+
+
+
+
+    #################################################
+
     def generer_contenu(self, joueur_encours):
 
-    	"""Méthode permet de générer le contenu du labyrinthe sous forme de chaine de caractères"""
+    	"""Méthode permet de générer le contenu du labyrinthe sous forme de chaine de caractères
+
+            Cette permet de générer un affichage personnaliser du 
+            Labyrinthe sur l'interface d'un joueur :
+            - Son robot apparait en grand X
+            - les autres robots en petit x
+
+        """
 
 
     	contenu = ""
@@ -123,30 +158,7 @@ class Labyrinthe:
     	return contenu
 
 
-    #################################################
-
-    def generer_postion_libre(self):
-
-    	"""Méthode permet de générer une position aléatoire libre pour un nouveau joueur"""
-
-    	i = 0
-    	liste_vides = [] # Liste des espaces vides (Une liste de tuple(x,y))
-    	
-    	for liste_ligne in self.grille:
-    		
-    		j = 0
-    		for obstacle in liste_ligne:
-    			if obstacle.symbole == " ":
-    				couple = (i,j)
-    				liste_vides.append(couple)
-    			j += 1
-    		i += 1
-
-    	vide_choisi = random.choice(liste_vides)
-
-    	return vide_choisi[0], vide_choisi[1] 
-
-
+    
 
 
     #################################################
