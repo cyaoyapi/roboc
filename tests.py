@@ -41,25 +41,26 @@ class UtilsTest(unittest.TestCase):
 		liste_noms.append(nom1)
 		fichier1 = open("cartes/facile.txt","r")
 		contenu1 = fichier1.read()
+		fichier1.close()
+		fichier.close()
 		carte1 = Carte(nom1,contenu1)
 		liste_cartes.append(carte1)
-		fichier1.close()
 
 		nom2 = "difficile"
 		liste_noms.append(nom2)
 		fichier2 = open("cartes/difficile.txt","r")
 		contenu2 = fichier2.read()
+		fichier2.close()
 		carte2 = Carte(nom2,contenu2)
 		liste_cartes.append(carte2)
-		fichier2.close()
 
 		nom3 = "prison"
 		liste_noms.append(nom3)
 		fichier3 = open("cartes/prison.txt","r")
+		fichier3.close()
 		contenu3 = fichier3.read()
 		carte3 = Carte(nom3,contenu3)
 		liste_cartes.append(carte3)
-		fichier3.close()
 
 		# Construction automatique de la liste avec la fonction à tester
 		liste_obtenue = utils.lister_cartes_existantes("cartes")
@@ -87,20 +88,21 @@ class UtilsTest(unittest.TestCase):
 		nom1 = "facile"
 		fichier1 = open("cartes/facile.txt","r")
 		contenu1 = fichier1.read()
+		fichier1.close()
 		carte1 = Carte(nom1,contenu1)
 		liste_cartes.append(carte1)
-		fichier1.close()
 
 		nom2 = "difficile"
 		fichier2 = open("cartes/difficile.txt","r")
 		contenu2 = fichier2.read()
+		fichier2.close()
 		carte2 = Carte(nom2,contenu2)
 		liste_cartes.append(carte2)
-		fichier2.close()
 
 		nom3 = "prison"
 		fichier3 = open("cartes/prison.txt","r")
 		contenu3 = fichier3.read()
+		fichier3.close()
 		carte3 = Carte(nom3,contenu3)
 		liste_cartes.append(carte3)
 		fichier3.close()
@@ -170,6 +172,7 @@ class LabyrintheTest(unittest.TestCase):
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
 		contenu = fichier.read()
+		fichier.close()
 		contenu_liste = contenu.split("\n")
 
 		symboles = {
@@ -238,6 +241,7 @@ class LabyrintheTest(unittest.TestCase):
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
 		contenu = fichier.read()
+		fichier.close()
 		contenu_liste = contenu.split("\n")
 
 		i = 0
@@ -279,6 +283,7 @@ class LabyrintheTest(unittest.TestCase):
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
 		contenu = fichier.read()
+		fichier.close()
 		carte_obtenue = Carte(nom_fichier,contenu)
 
 		x1,y1 = carte_obtenue.labyrinthe.generer_postion_libre()
@@ -294,6 +299,8 @@ class LabyrintheTest(unittest.TestCase):
 		ip2 = 'localhost'
 		port2 = 12348
 		joueur2 = Joueur(x2,y2,ip2,port2,socket2)
+		socket1.close()
+		socket2.close()
 		carte_obtenue.labyrinthe.grille[x2][y2] = joueur2
 		carte_obtenue.labyrinthe.joueurs.append(joueur2)
 
@@ -341,6 +348,7 @@ class LabyrintheTest(unittest.TestCase):
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
 		contenu = fichier.read()
+		fichier.close()
 		carte_obtenue = Carte(nom_fichier,contenu)
 
 		x1,y1 = carte_obtenue.labyrinthe.generer_postion_libre()
@@ -358,7 +366,8 @@ class LabyrintheTest(unittest.TestCase):
 		joueur2 = Joueur(x2,y2,ip2,port2,socket2)
 		carte_obtenue.labyrinthe.grille[x2][y2] = joueur2
 		carte_obtenue.labyrinthe.joueurs.append(joueur2)
-
+		socket1.close()
+		socket2.close()
 		num_tour = random.randint(0,1)
 
 		# Cas 1 : déplacement Nord, Sud, Est, Ouest sans précision du pas (mais en fait pas = 1)
@@ -383,6 +392,7 @@ class LabyrintheTest(unittest.TestCase):
 		fin, msg_a_envoyer = carte_obtenue.labyrinthe.deplacer_robot(num_tour,msg_recu)
 		self.assertIn(fin,[True, False])
 		self.assertIn(msg_a_envoyer,Labyrinthe.MSG.values())
+
 
 
 
