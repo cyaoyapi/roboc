@@ -42,7 +42,6 @@ class UtilsTest(unittest.TestCase):
 		fichier1 = open("cartes/facile.txt","r")
 		contenu1 = fichier1.read()
 		fichier1.close()
-		fichier.close()
 		carte1 = Carte(nom1,contenu1)
 		liste_cartes.append(carte1)
 
@@ -57,8 +56,8 @@ class UtilsTest(unittest.TestCase):
 		nom3 = "prison"
 		liste_noms.append(nom3)
 		fichier3 = open("cartes/prison.txt","r")
-		fichier3.close()
 		contenu3 = fichier3.read()
+		fichier3.close()
 		carte3 = Carte(nom3,contenu3)
 		liste_cartes.append(carte3)
 
