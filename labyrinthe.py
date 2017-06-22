@@ -25,16 +25,16 @@ class Labyrinthe:
         - MSG : dictionnaires de messages utilisateurs
         - REGEX1 et REGEX2 : motifs d'expressions regulièrement pour la validation des saisies utilisateurs
 
-    * Entre autes les méthodes :
+    * Les méthodes :
 
-        - 'generer_contenu' : générant le contenu du labyrinthe sous forme de chaine
+        - 'generer_contenu' : générant le contenu du labyrinthe sous forme de chaine de caractères
         - 'generer_postion_libre' : générant une position aléatoire libre sur le labyrinthe
         - 'obstacles_intermediaires' : Teste s'il y a pas d'obstacles intermédiares pour un déplacement de pas > 1
-        - 'gerer_lignes_deplacement_y': gère la réconstruction des lignes imapctées en cas de déplacement verticale (N et S)
+        - 'gerer_lignes_deplacement_y': gère la reconstruction des lignes imapctées en cas de déplacement verticale (N et S)
         - 'gerer_ligne_deplacement_x': gère la reconstruction de la ligne impactée en cas de déplacement horizontale (O et E)
         - 'deplacement_hors_labyrinthe' : Teste si le déplacement n'est pas hors des limites du labyrinthe
         - 'deplacement_dans_labyrinthe' : gère le dplacement quand on est dans des limites du labyrinthe
-        - 'routine_deplacement' : routine utilisé dans la méthode principale de déplacement "deplacer_robot"
+        - 'routine_deplacement' : routine utilisée dans la méthode principale de déplacement "deplacer_robot"
         - 'declencher_action' : permet soit de murer une porte ou de trouer un mur
         - 'deplacer_robot' : méthode principale qui gère le déplacement d'un robot
 
@@ -50,7 +50,7 @@ class Labyrinthe:
         "M": "Bien joué ! Vous venez de murer une porte !\n",
         "MI": "Attention ! Action impossible. Vous ne pouvez murer qu'une porte(.)\n",
         "P": "Bien joué ! Vous venez de trouer un mur !\n",
-        "PI": "Attention ! Action impossible. Vous ne pouvez trouer qu'un porte(O)\n",
+        "PI": "Attention ! Action impossible. Vous ne pouvez trouer qu'un mur(O)\n",
         "F": "Félicitations ! Vous avez gagné la partie \n",
     }
 
@@ -101,7 +101,7 @@ class Labyrinthe:
 
     def generer_postion_libre(self):
 
-        """Méthode permet de générer une position aléatoire libre pour un nouveau joueur"""
+        """Méthode permettant de générer une position aléatoire libre pour un nouveau joueur"""
 
         i = 0
         liste_vides = [] # Liste des espaces vides (Une liste de tuple(x,y))
@@ -127,9 +127,9 @@ class Labyrinthe:
 
     def generer_contenu(self, joueur_encours):
 
-    	"""Méthode permet de générer le contenu du labyrinthe sous forme de chaine de caractères
+    	"""Méthode permettant de générer le contenu du labyrinthe sous forme de chaine de caractères
 
-            Cette permet de générer un affichage personnaliser du 
+            Cette permet de générer un affichage personnalisé du 
             Labyrinthe sur l'interface d'un joueur :
             - Son robot apparait en grand X
             - les autres robots en petit x
@@ -168,14 +168,14 @@ class Labyrinthe:
         """Cette méthode vérifie s'il y a des obstacles intermédiaires dans le cas ou le pas > 1 (exemple O3; E2; ...)
 
             - sens : orientation de deplacement
-            - x : ligne actuelle où se trouve le 
+            - x : ligne actuelle où se trouve le robot
             - y : colonne colonne où se trouve le robot
             - x_new : nouvelle ligne où va se retrouver le robot après deplacement
             - y_new : nouvelle colonne où va se retrouver le robot après deplacement
             
             Cette méthode est appelée dans la méthode 'deplacement_dans_labyrinthe'
             
-            Elle return la un boolean 'collision'
+            Elle return un boolean 'collision'
 
         """
 
@@ -235,7 +235,7 @@ class Labyrinthe:
             - y_new : nouvelle colonne où va se retrouver le robot après deplacement
             
             Deux lignes sont impactées lors d'un déplacement verticale :
-            - Celle la ligne actuelle
+            - la ligne actuelle
             - Et la la ligne future (nouvelle)
 
             Cette méthode est appelée dans la méthode 'deplacement_dans_labyrinthe'
@@ -271,13 +271,13 @@ class Labyrinthe:
 
     def gerer_ligne_deplacement_x(self, num_tour, x, y, x_new, y_new):
 
-        """Cette méthode permet de reconstruire la ligne impactées par un déplacement horizontal(Est ou Ouest) du robot
+        """Cette méthode permet de reconstruire la ligne impactée par un déplacement horizontal(Est ou Ouest) du robot
             - x : ligne actuelle où se trouve le 
             - y : colonne colonne où se trouve le robot
             - x_new : nouvelle ligne où va se retrouver le robot après deplacement
             - y_new : nouvelle colonne où va se retrouver le robot après deplacement
 
-            Une seule ligne est impactée, la ligne actuelle, seule les colonnes d'origine et d'arrivée change
+            Une seule ligne est impactée, la ligne actuelle, seule les colonnes d'origine et d'arrivée changent
             
             Cette méthode est appelée dans la méthode 'deplacement_dans_labyrinthe'
 
@@ -309,7 +309,7 @@ class Labyrinthe:
 
     def deplacement_hors_labyrinthe(self, sens, x_new, y_new):
 
-        """Cette méthode determine si le de placement voulu est hors dela zone du layrinthe
+        """Cette méthode determine si le de placement voulu est au-dela de la zone du layrinthe
 
             - sens : orientation de deplacement
             - x_new : nouvelle ligne où va se retrouver le robot après deplacement
@@ -337,7 +337,7 @@ class Labyrinthe:
             - sens : orientation du déplacement 
             - pas : le pas
             - num_tour = le numéro du joueur
-            - x : ligne actuelle où se trouve le 
+            - x : ligne actuelle où se trouve le robot
             - y : colonne colonne où se trouve le robot
             - x_new : nouvelle ligne où va se retrouver le robot après deplacement
             - y_new : nouvelle colonne où va se retrouver le robot après deplacement
@@ -352,7 +352,7 @@ class Labyrinthe:
             - 'gerer_lignes_deplacement_y'
             - 'gerer_ligne_deplacement_x'
 
-            Elle est elle même appelée dans 'deplacer_robot'
+            Elle est elle même appelée dans 'routine_deplacement'
 
         """
 
@@ -398,7 +398,7 @@ class Labyrinthe:
             - sens : orientation du déplacement 
             - pas : le pas de déplacement
             - num_tour = le numéro du joueur
-            - x : ligne actuelle où se trouve le 
+            - x : ligne actuelle où se trouve le robot
             - y : colonne colonne où se trouve le robot
             - x_new : nouvelle ligne où va se retrouver le robot après deplacement
             - y_new : nouvelle colonne où va se retrouver le robot après deplacement
@@ -413,6 +413,8 @@ class Labyrinthe:
 
             - 'deplacement_hors_labyrinthe'
             - 'deplacement_dans_labyrinthe'
+
+            Elle est elle même appelée dans 'deplacer_robot'
 
         """
         fin = False
@@ -444,7 +446,7 @@ class Labyrinthe:
             - y_new : la colonne de l'élément sur lequel on peut mener l'action
             
 
-            Elle est elle même appelée dans la méthode 'deplacer_robot'
+            Elle est appelée dans la méthode 'deplacer_robot'
 
         """
 
