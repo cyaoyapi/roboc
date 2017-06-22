@@ -120,8 +120,10 @@ class UtilsTest(unittest.TestCase):
 	def test_determiner_nouvelle_position(self):
 
 		""" Teste la fonction 'test_determiner_nouvelle_position' 
+
 			Cette fonctionne détermine les coordonnées de la nouvelle
 			position où un joueur désire se rendre lors d'un déplacement
+
 		"""
 
 		# On genère des coordonnées actuelles, le sens, le pas aléatoirement
@@ -166,7 +168,7 @@ class LabyrintheTest(unittest.TestCase):
 
 		""" Teste la création d'un labyrinthe via la création d'une carte """
 		
-		# On créer manuellement une carte et un labyrinthe manuellement
+		# On créer manuellement une carte et un labyrinthe 
 		nom_fichier = random.choice(["facile","prison","difficile"])
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
@@ -195,7 +197,7 @@ class LabyrintheTest(unittest.TestCase):
 			grille.append(liste_ligne)
 			i += 1 
 		
-		# On crée une carte(indirectemebt un labyrinthe) via le constructeur
+		# On crée une carte(indirectement un labyrinthe) via le constructeur
 		# de la classe Carte(indirectement de la classe Labyrinthe) 
 		carte_obtenue = Carte(nom_fichier,contenu)
 
@@ -229,13 +231,14 @@ class LabyrintheTest(unittest.TestCase):
 	def test_generer_postion_libre(self):
 
 		""" Teste la fonction 'generer_postion_libre' 
+
 			Cette méthode de la classe Labyrinthe génère aléatoirement
 			une positive libre qu'on peut attribuer à un joueur qui se
 			connecte pour participer au jeu. 
 
 		"""
 		
-		# On réalise l'opération manuelle sur une carte
+		# On réalise l'opération manuellement sur une carte
 		nom_fichier = random.choice(["facile","prison","difficile"])
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
@@ -257,8 +260,7 @@ class LabyrintheTest(unittest.TestCase):
 		# On réalise l'opération via la méthode à tester
 		carte_obtenue = Carte(nom_fichier,contenu)
 		position_libre_obtenu = carte_obtenue.labyrinthe.generer_postion_libre()
-		#la position obtenue est t-elle dans la liste des positions
-		#libres manuellement trouvées ?
+		#la position obtenue est t-elle dans la liste des positions libres manuellement trouvées ?
 		self.assertIn(position_libre_obtenu,liste_vides)
 
 
@@ -270,14 +272,14 @@ class LabyrintheTest(unittest.TestCase):
 		""" Teste la fonction 'generer_contenu' 
 			
 			Cette méthode de la classe Labyrinthe permet de
-			générer un affichage personnaliser du Labyrinthe
+			générer un affichage personnalisé du Labyrinthe
 			sur l'interface d'un joueur :
 			- Son robot apparait en grand X
 			- les autres robots en petit x
 
 		"""
 		
-		# On réalise l'opération manuelle sur une carte
+		# On réalise l'opération manuellement sur une carte
 		nom_fichier = random.choice(["facile","prison","difficile"])
 		path_fichier = "cartes/"+nom_fichier+".txt"
 		fichier = open(path_fichier,"r")
@@ -375,7 +377,7 @@ class LabyrintheTest(unittest.TestCase):
 		self.assertIn(fin,[True, False])
 		self.assertIn(msg_a_envoyer,Labyrinthe.MSG.values())
 
-		# Cas 2 : déplacement Nord, Sud, Est, Ouest sans précision du pas et p >= 1
+		# Cas 2 : déplacement Nord, Sud, Est, Ouest avec précision du pas et p >= 1
 		pas = random.randint(1,30)
 		Np = "N"+ str(pas)
 		Sp = "S"+ str(pas)
