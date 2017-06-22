@@ -71,7 +71,7 @@ while not commencer:
 	for connexion in connexions_demandees: 
 		connexion_client, (ip, port) = connexion.accept()
 		clients_connectes.append(connexion_client)
-		# On vérifie ce client est déjà selectionné
+		# On vérifie si ce client est déjà selectionné
 		deja_connecte = False
 		for joueur in carte_choisie.labyrinthe.joueurs:
 			if joueur.ip == ip and joueur.port == port:
@@ -142,7 +142,7 @@ fin = False
 REGEX1 = r"^[NESO]([1-9][0-9]*)*$" # Motif de validation du choix valide de déplacement du robot
 REGEX2 = r"^[MP][NESO]$" # Motif de choix de validation pour Murer une porte ou Trouer un mur
 
-num_tour = 1 # initialisation du numéro de tour 1 ( c'est le premier joueur commence la partie)
+num_tour = 1 # initialisation du numéro de tour 1 ( c'est le premier joueur qui commence la partie)
 while not fin:
 	# On récupère le joueur dont c'est le tour
 	joueur = carte_choisie.labyrinthe.joueurs[num_tour - 1]
@@ -165,8 +165,8 @@ while not fin:
 		# Si c'était le tour du dernier joueur de la liste et qu'il veut quitter
 		if num_tour == len(carte_choisie.labyrinthe.joueurs):
 			num_tour = 1 # On retourne directement au premier joueur
-		# On reprend la boucle avec le même numero de tour. On incrémente pas num_tour
-		# En fait le nombre de joueurs a dimunué, le suivant devant celui qui est à la
+		# Sinon On reprend la boucle avec le même numero de tour. On n'incrémente pas num_tour
+		# En fait le nombre de joueurs a dimunué, le suivant devient celui qui est à la
 		# position num_tour courante
 		#else:
 			#num_tour = num_tour 
@@ -196,7 +196,7 @@ while not fin:
 			msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
 			chaque_joueur.socket.send(msg_a_envoyer.encode())
 
-		# On attend un délai de 2 sécondes passer au tour suivant
+		# On attend un délai de 2 sécondes pour passer au tour suivant
 		tps=time.time()
 		while time.time() - tps < 2:
 			pass
@@ -224,8 +224,8 @@ while not fin:
 			# On sort de la boucle (fin = True)
 			break
 
-		# Si tout vas vient (c'est pas la fin, le joeur ne quitte pas)
-		# Si c'est le dernier joueur de l liste qui est en cours, on retourne au premier
+		# Si tout vas vient (ce n'es pas la fin ou le joeur ne quitte pas)
+		# Si c'est le dernier joueur de la liste qui est en cours, on retourne au premier
 		if num_tour == len(carte_choisie.labyrinthe.joueurs):
 			num_tour = 1
 		# Sinon on passe au suivant
@@ -236,14 +236,14 @@ while not fin:
 
 #########C'est la fin : on est sortie de la boucle #####################
 
-# On récupère le gangant
-joueur_gangant = carte_choisie.labyrinthe.joueurs[num_tour - 1]
+# On récupère le joueur gagnant
+joueur_gagnant = carte_choisie.labyrinthe.joueurs[num_tour - 1]
 
 # On informe tous les joueurs
 for chaque_joueur in carte_choisie.labyrinthe.joueurs:
 
-	if chaque_joueur.ip != joueur_gangant.ip or chaque_joueur.port != joueur_gangant.port:
-		msg_a_envoyer = "Le joueur {} a gagné la partie. Vous avez perdu !\n".format(joueur_gangant.num)
+	if chaque_joueur.ip != joueur_gagnant.ip or chaque_joueur.port != joueur_gagnant.port:
+		msg_a_envoyer = "Le joueur {} a gagné la partie. Vous avez perdu !\n".format(joueur_gagnant.num)
 		chaque_joueur.socket.send(msg_a_envoyer.encode())
 		msg_a_envoyer = carte_choisie.labyrinthe.generer_contenu(chaque_joueur)
 		chaque_joueur.socket.send(msg_a_envoyer.encode())
@@ -256,7 +256,7 @@ for chaque_joueur in carte_choisie.labyrinthe.joueurs:
 	"""
 	chaque_joueur.socket.send(msg_a_envoyer.encode())
 # Coté serveur
-print("Le joueur {} a gagné la partie \n".format(joueur_gangant.num))
+print("Le joueur {} a gagné la partie \n".format(joueur_gagnant.num))
 print("C'est la fin de la partie. Merci et à bientôt\n")
 
 # On attent 10 secondes avant de tout arrêter pour ne pas que ce soit brusque
