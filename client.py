@@ -83,7 +83,7 @@ class Envoyer(threading.Thread):
 
 ####################### Programme principal du client : Connexion avec le serveur######################
 
-HOTE = '' # on s'attend à une connection de n'importe quel hote 
+HOTE = 'localhost' # on s'attend à une connection de n'importe quel hote 
 PORT = 12000 # port d'écoute du serveur
 
 connexion_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
